@@ -8,10 +8,13 @@ const UuidV4 = (() => {
 		return window.crypto.getRandomValues(randomPool);
 	};
 	/** @type {string[]} */
-	const byteToHex = [];
-	for (let i = 0; i < 256; ++i) {
-		byteToHex.push((i + 0x100).toString(16).slice(1));
-	}
+	const byteToHex = [].slice.call((() => {;
+		let bth = [];
+		for (let i = 0; i < 256; ++i) {
+			bth.push((i + 0x100).toString(16).slice(1));
+		}
+		return bth;
+	})());
 	/** @type {(arr: Uint8Array) => string} */
 	const stringify = (arr) => {
 		return (
