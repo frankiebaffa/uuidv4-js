@@ -14,7 +14,7 @@ Generates a new uuidv4. That's it.
 ### rng
 
 ```typescript
-const rng(): Uint8Array = () => {
+const rng = (): Uint8Array => {
     // ...
 };
 ```
@@ -25,7 +25,7 @@ fill a static 16-byte `Uint8Array` with random values.
 ### stringify
 
 ```typescript
-const stringify(arr: Uint8Array): string => {
+const stringify = (arr: Uint8Array): string => {
     // ...
 };
 ```
@@ -39,7 +39,7 @@ throughout the lifetime of the object.
 ### uuidv4Fn
 
 ```typescript
-const uuidv4Fn = () => {
+const uuidv4Fn = (): string => {
     let random = rng();
     // conform `random` to v4.4 spec...
     return stringify(random);
