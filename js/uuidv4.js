@@ -1,21 +1,33 @@
 const UuidV4 = (() => {
 	const randomPool = new Uint8Array(16);
-	/** @type {() => Uint8Array} */
+	/**
+	 * Create random pool of values using browser's built-in crypto.
+	 * @function
+	 * @returns {Uint8Array}
+	 */
 	const rng = () => {
 		if (!"crypto" in window) {
 			throw new Error("Browser does not support crypto api");
 		}
 		return window.crypto.getRandomValues(randomPool);
 	};
-	/** @type {string[]} */
+	/**
+	 * An array of hexadecimal strings representing bytes 0x00 to 0xff.
+	 * @type {string[]}
+	 */
 	const byteToHex = [].slice.call((() => {;
-		let bth = [];
+		let hexStrings = [];
 		for (let i = 0; i < 256; ++i) {
-			bth.push((i + 0x100).toString(16).slice(1));
+			hexStrings.push((i + 0x100).toString(16).slice(1));
 		}
-		return bth;
+		return hexStrings;
 	})());
-	/** @type {(arr: Uint8Array) => string} */
+	/**
+	 * Grabs string representations of bytes from byteToHex array.
+	 * @function
+	 * @param {Uint8Array} arr
+	 * @returns {string}
+	 */
 	const stringify = (arr) => {
 		return (
 			byteToHex[arr[0]] +
@@ -40,7 +52,12 @@ const UuidV4 = (() => {
 			byteToHex[arr[15]]
 		).toLowerCase();
 	};
-	/** @type {() => string} */
+	/**
+	 * Uses browser's RNG and a pre-populated string array of hex-bytes
+	 * to generate a uuidv4 string.
+	 * @function
+	 * @returns {string}
+	 */
 	const uuidv4Fn = () => {
 		let random = rng();
 		// v4.4 spec
@@ -48,8 +65,17 @@ const UuidV4 = (() => {
 		random[8] = (random[8] & 0x3f) | 0x80;
 		return stringify(random);
 	};
-	const uuidv4Obj = {
-		new: uuidv4Fn
-	};
-	return uuidv4Obj;
+	class UuidV4 {
+		/**
+		 * Uses the browser's RNG and a pre-populated string array of
+		 * hex-bytes to generate a uuidv4 string.
+		 * @static
+		 * @function
+		 * @returns {string}
+		 */
+		static new() {
+			return uuidv4Fn();
+		}
+	}
+	return UuidV4;
 })();
